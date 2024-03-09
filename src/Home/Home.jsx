@@ -18,6 +18,7 @@ const Home = () => {
         const phoneNumber = form.phoneNumber.value;
         const textField = form.textField.value;
 
+
         const updatedFormData = {
             firstName,
             lastName,
@@ -27,32 +28,41 @@ const Home = () => {
         };
 
         console.log(updatedFormData);
-       //setFormData(updatedFormData);
+        //setFormData(updatedFormData);
 
         //Make a POST request to the HubSpot API
         //https://api.hsforms.com/submissions/v3/integration/submit/:portal_id/:form_guid'
-        try { 
-            const response = await fetch('https://app.hubspot.com/forms/45277480', {
+        try {
+            const response = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
                 mode: 'no-cors',
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json, text/plain',
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json;charset=UTF-8',
-                    //'Content-Type': 'application/json',
-                    Authorization: 'pat-na1-d751be35-6f97-4541-af92-f5602dfceeb4',
+                    Authorization: 'Bearer CN_9uaPiMRIUAAEBUAAA-SIAAED8BwEA4AcAAAQY--TLFSDq48geKJvfmgEyFPfwJLvjcS0aSl0Xq-_ShiYR8YDeOkEAAABBAAAAAMAHAAAAAAAAAIYAAAAAAAAADAAggI8APgDgMQAAAAAEwP__HwAQ8AMAAID__wMAAAAAAOABAADsH0IUs6_c-Gn8K534oHcOScF6ByRg_KNKA25hMVIAWgA',
                 },
-                body: JSON.stringify(updatedFormData)
-              
+                body: {
+                    "properties": {
+                        "email": "example@hubspot.com",
+                        "firstname": "Jane",
+                        "lastname": "Doe",
+                        "phone": "(555) 555-5555",
+                        "company": "HubSpot",
+                        "website": "hubspot.com",
+                        "lifecyclestage": "marketingqualifiedlead"
+                    }
+                }
+
             });
 
             const data = await response.json();
             setFormData(data);
             console.log('Data sent to HubSpot:', data);
-        } 
+        }
         catch (error) {
             console.error('Error sending data to HubSpot:', error);
         }
-     };
+    };
 
     return (
         <div className="flex justify-center items-center h-screen">
